@@ -1,5 +1,6 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
+import { articleAPI } from "../../shared/API";
 
 const POST = "article/POST";
 const GET = "article/GET";
