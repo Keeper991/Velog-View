@@ -5,19 +5,29 @@ const Button = (props) => {
   const {
     padding,
     margin,
+    bg,
+    color,
     width,
     height,
     children,
-    bg,
-    color,
     _onClick,
     shape,
+    fontSize,
   } = props;
 
   if (shape === "circle") {
     return (
       <React.Fragment>
-        <ElCircleButton width={width} height={height} onClick={_onClick}>
+        <ElCircleButton
+          width={width}
+          height={height}
+          onClick={_onClick}
+          padding={padding}
+          margin={margin}
+          bg={bg}
+          color={color}
+          fontSize={fontSize}
+        >
           {children}
         </ElCircleButton>
       </React.Fragment>
@@ -26,7 +36,16 @@ const Button = (props) => {
   if (shape === "rectangle") {
     return (
       <React.Fragment>
-        <ElRectangleButton width={width} height={height} onClick={_onClick}>
+        <ElRectangleButton
+          width={width}
+          height={height}
+          onClick={_onClick}
+          padding={padding}
+          margin={margin}
+          bg={bg}
+          color={color}
+          fontSize={fontSize}
+        >
           {children}
         </ElRectangleButton>
       </React.Fragment>
@@ -35,7 +54,16 @@ const Button = (props) => {
   if (shape === "pill") {
     return (
       <React.Fragment>
-        <ElPillButton width={width} height={height} onClick={_onClick}>
+        <ElPillButton
+          width={width}
+          height={height}
+          onClick={_onClick}
+          padding={padding}
+          margin={margin}
+          bg={bg}
+          color={color}
+          fontSize={fontSize}
+        >
           {children}
         </ElPillButton>
       </React.Fragment>
@@ -46,21 +74,38 @@ const Button = (props) => {
 Button.defaultProps = {};
 
 const ElCircleButton = styled.button`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
+  border: none;
   border-radius: 50%;
+  cursor: pointer;
+  ${(props) => (props.width ? `width: ${props.width};` : "")}
+  ${(props) => (props.height ? `height: ${props.height};` : "")}
+  ${(props) => (props.padding ? `padding: ${props.padding};` : "")}
+  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
+  ${(props) => (props.bg ? `background-color: ${props.bg};` : "")}
+  ${(props) => (props.color ? `color: ${props.color};` : "")}
 `;
 
 const ElRectangleButton = styled.button`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
+  font-weight: 600;
+  border: none;
   border-radius: 3px;
+  cursor: pointer;
+  background-color: ${(props) => (props.bg ? props.bg : "rgb(32, 201, 151)")};
+  color: ${(props) => (props.color ? props.color : "white")};
+  height: ${(props) => (props.height ? props.height : "1.5rem")};
+  fontsize: 1rem;
+  padding: 0px 15px;
 `;
 
 const ElPillButton = styled.button`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  border-radius: ${(props) => props.height};
+  border: 1px solid rgb(52, 58, 64);
+  border-radius: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  height: 2rem;
+  background-color: white;
+  padding: 0 15px;
+  color: rgb(52, 58, 64);
 `;
 
 export default Button;

@@ -16,9 +16,25 @@ const Input = (props) => {
   return (
     <React.Fragment>
       {is_multiline ? (
-        <ElTextarea placeholder={placeholder}>{value}</ElTextarea>
+        <ElTextarea
+          placeholder={placeholder}
+          padding={padding}
+          margin={margin}
+          width={width}
+          height={height}
+          value={value}
+          onChange={_onChange}
+        ></ElTextarea>
       ) : (
-        <ElInput placeholder={placeholder} value={value} onChange={_onChange} />
+        <ElInput
+          placeholder={placeholder}
+          padding={padding}
+          margin={margin}
+          width={width}
+          height={height}
+          value={value}
+          onChange={_onChange}
+        />
       )}
     </React.Fragment>
   );
@@ -26,8 +42,20 @@ const Input = (props) => {
 
 Input.defaultProps = {};
 
-const ElInput = styled.input``;
+const ElTextarea = styled.textarea`
+  ${(props) => (props.width ? `width: ${props.width};` : "")}
+  ${(props) => (props.height ? `height: ${props.height};` : "")}
+  ${(props) => (props.padding ? `padding: ${props.padding};` : "")}
+  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
+  ${(props) => (props.placeholder ? `placeholder: ${props.placeholder};` : "")}
+`;
 
-const ElTextarea = styled.textarea``;
+const ElInput = styled.input`
+  ${(props) => (props.width ? `width: ${props.width};` : "")}
+  ${(props) => (props.height ? `height: ${props.height};` : "")}
+  ${(props) => (props.padding ? `padding: ${props.padding};` : "")}
+  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
+  ${(props) => (props.placeholder ? `placeholder: ${props.placeholder};` : "")}
+`;
 
 export default Input;

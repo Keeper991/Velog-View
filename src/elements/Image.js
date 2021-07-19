@@ -2,52 +2,82 @@ import React from "react";
 import styled from "styled-components";
 
 const Image = (props) => {
-  const { src, padding, margin, width, height, shape } = props;
+  const { imgUrl, padding, margin, width, height, shape } = props;
 
   if (shape === "circle") {
     return (
       <React.Fragment>
-        <ElCircleImage width={width} height={height} src={src} />
+        <ElCircleImage
+          width={width}
+          height={height}
+          imgUrl={imgUrl}
+          padding={padding}
+          margin={margin}
+        />
       </React.Fragment>
     );
   }
   if (shape === "rectangle") {
     return (
       <React.Fragment>
-        <ElRectangleImage width={width} height={height} src={src} />
+        <ElRectangleImage
+          width={width}
+          height={height}
+          imgUrl={imgUrl}
+          padding={padding}
+          margin={margin}
+        />
       </React.Fragment>
     );
   }
-  if (shape === "extra") {
-    return (
-      <React.Fragment>
-        <ElExtraImage width={width} height={height} src={src} />
-      </React.Fragment>
-    );
-  }
+  return (
+    <React.Fragment>
+      <ElExtraImage
+        width={width}
+        height={height}
+        imgUrl={imgUrl}
+        padding={padding}
+        margin={margin}
+      />
+    </React.Fragment>
+  );
 };
 
-Image.defaultProps = {};
+Image.defaultProps = {
+  width: "100%",
+};
 
-const ElCircleImage = styled.img`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
+const ElCircleImage = styled.div`
   border-radius: 50%;
-  src: ${(props) => props.src};
+  background-image: url(${(props) => props.imgUrl});
+  background-size: cover;
+  background-position: center;
+  ${(props) => (props.width ? `width: ${props.width};` : "")}
+  ${(props) => (props.height ? `height: ${props.height};` : "")}
+  ${(props) => (props.padding ? `padding: ${props.padding};` : "")}
+  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
 `;
 
-const ElRectangleImage = styled.img`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
+const ElRectangleImage = styled.div`
   border-radius: 3px;
-  src: ${(props) => props.src};
+  background-image: url(${(props) => props.imgUrl});
+  background-size: cover;
+  background-position: center;
+  ${(props) => (props.width ? `width: ${props.width};` : "")}
+  ${(props) => (props.height ? `height: ${props.height};` : "")}
+  ${(props) => (props.padding ? `padding: ${props.padding};` : "")}
+  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
 `;
 
-const ElExtraImage = styled.img`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
+const ElExtraImage = styled.div`
   border-radius: 1rem;
-  src: ${(props) => props.src};
+  background-image: url(${(props) => props.imgUrl});
+  background-size: cover;
+  background-position: center;
+  ${(props) => (props.width ? `width: ${props.width};` : "")}
+  ${(props) => (props.height ? `height: ${props.height};` : "")}
+  ${(props) => (props.padding ? `padding: ${props.padding};` : "")}
+  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
 `;
 
 export default Image;
