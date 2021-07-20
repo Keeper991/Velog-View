@@ -2,7 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 const Text = (props) => {
-  const { padding, margin, width, height, children, fontSize, isTitle } = props;
+  const {
+    padding,
+    margin,
+    width,
+    height,
+    children,
+    fontSize,
+    isTitle,
+    isBold,
+  } = props;
 
   return (
     <React.Fragment>
@@ -23,6 +32,7 @@ const Text = (props) => {
           width={width}
           height={height}
           fontSize={fontSize}
+          isBold={isBold}
         >
           {children}
         </ElText>
@@ -51,6 +61,7 @@ const ElText = styled.span`
   ${(props) => (props.width ? `width: ${props.width};` : "")}
   ${(props) => (props.height ? `height: ${props.height};` : "")}
   ${(props) => (props.fontsize ? `font-size: ${props.fontsize};` : "")}
+  ${(props) => (props.isBold ? `font-weight: ${props.isBold};` : "")}
 `;
 
 export default Text;

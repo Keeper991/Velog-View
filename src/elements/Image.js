@@ -43,9 +43,7 @@ const Image = (props) => {
   );
 };
 
-Image.defaultProps = {
-  width: "100%",
-};
+Image.defaultProps = {};
 
 const ElCircleImage = styled.div`
   border-radius: 50%;

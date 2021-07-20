@@ -1,74 +1,120 @@
 import { Image, Text } from "../elements";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import styled from "styled-components";
+import timeToDate from "../shared/Time";
 
 const Card = (props) => {
   const {
+    id,
     title,
-    subtitle,
-    dt_num,
-    comment_cnt,
-    profile_img,
-    user_name,
-    like_cnt,
+    description,
+    createAt,
+    thumbnail,
+    commentCount,
+    profileImage,
+    username,
+    likeCount,
   } = props;
 
   return (
-    <Container width="320px" height="375px" margin="16px">
-      <Image src={profile_img} width="100%" height="165px" shape="rectangle" />
-      <Container
-        width="320px"
-        height="165px"
-        padding="16px"
-        flex_direction="column"
-      >
-        <Container margin="0 0 4px 0">
-          <Text>{title}</Text>
-        </Container>
-        <Container margin="0 0 24px 0">
-          <Text>{subtitle}</Text>
-        </Container>
-        <Container
-          width="320px"
+    <Container>
+      <ThumbnailBox>
+        <Image
+          imgUrl={thumbnail}
+          shape="rectangle"
+          width="100%"
           height="100%"
-          flex_direction="row"
-          align_items="flex-end"
-        >
-          <Text margin="0 5px 0 0" fontsize="12px">
-            {dt_num}
+        />
+      </ThumbnailBox>
+      <ContentWrap>
+        <ContentBox>
+          <Text isTitle margin="0 0 5px 0">
+            {title}
           </Text>
-          <Text margin="0 0 0 5px" fontsize="12px">
-            {comment_cnt}개의 댓글
+          <Text padding="5px 0">{description}</Text>
+        </ContentBox>
+        <DtCmtWrap>
+          <Text>{timeToDate(createAt)}</Text>
+          {" ∙ "}
+          <Text>{commentCount}개의 댓글</Text>
+        </DtCmtWrap>
+      </ContentWrap>
+      <CardInfo>
+        <UserBox>
+          <Image imgUrl={profileImage} width="24px" height="24px" />
+          <p> by </p>
+          <Text fontSize="0.75rem" isBold="bold">
+            {username}
           </Text>
-        </Container>
-      </Container>
-      <Container
-        width="320px"
-        height="45px"
-        padding="10px 16px"
-        border_top="1px solid lightgray"
-      >
-        <Image src={profile_img} shape="circle" />
-        <Text>{user_name}</Text>
-        <Text>{like_cnt}</Text>
-      </Container>
+        </UserBox>
+        <LikeBox>
+          <FavoriteIcon fontSize="small" />
+          <Text margin="0 0 0 8px">{likeCount}</Text>
+        </LikeBox>
+      </CardInfo>
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  margin: ${(props) => props.margin};
-  padding: ${(props) => props.padding};
-  ${(props) => (props.border_top ? `border-top: ${props.border_top};` : "")}
-  ${(props) =>
-    props.flex_direction
-      ? `display: flex; flex-direction: ${props.flex_direction};`
-      : ""}
-  ${(props) => (props.position ? `position: ${props.position};` : "")}
-  ${(props) => (props.bottom ? `bottom: ${props.bottom};` : "")}
-  ${(props) => (props.align_items ? `align-items: ${props.align_items};` : "")}
+  width: 325px;
+  height: 380px;
+  margin: 16px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  transition: 0.5s;
+  &: hover {
+    cursor: pointer;
+    transform: translateY(-12px);
+  }
+  display: flex;
+  flex-direction: column;
+`;
+
+const ThumbnailBox = styled.div`
+  width: 100%;
+  min-height: 165px;
+`;
+
+const ContentWrap = styled.div`
+  height: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const ContentBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const DtCmtWrap = styled.div`
+  font-size: 0.75rem;
+  color: gray;
+`;
+
+const CardInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid lightgray;
+  padding: 10px 16px;
+`;
+
+const UserBox = styled.div`
+  display: flex;
+  align-items: center;
+  & > p:nth-of-type(1) {
+    margin: 0 8px;
+    color: gray;
+  }
+`;
+
+const LikeBox = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export default Card;
