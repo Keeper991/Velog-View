@@ -27,8 +27,22 @@ const initialArticle = {
 };
 
 const initialState = {
+  // 최신순
   articleList: [initialArticle],
-  isLoading: false,
+  // 좋아요순
+  articleListOrderByLike: [],
+  // 로딩중
+  isLoading: true,
+  // pagination
+  paging: {
+    // 최신순
+    nextPage: 1,
+    totalArticleCnt: 0,
+    // 좋아요순
+    nextPageOrderByLike: 1,
+    totalArticleCntOrderByLike: 0,
+    size: 10,
+  },
 };
 
 const reducer = handleActions(
@@ -42,5 +56,5 @@ const reducer = handleActions(
   initialState
 );
 
-export const actionCreators = {};
+export const actionCreators = { getArticle };
 export default reducer;
