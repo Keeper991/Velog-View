@@ -7,121 +7,157 @@ import ShareIcon from "@material-ui/icons/Share";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import Comment from "../components/Comment";
 import { actionCreators as articleActions } from "../redux/modules/article";
-import { useEffect } from "react";
+import { actionCreators as commentActions } from "../redux/modules/comment";
+import { useEffect, useRef, useState } from "react";
 import timeToDate from "../shared/Time";
+import MdViewer, { setContent } from "../shared/MdViewer";
+import { getUserInfoFromLS } from "../shared/Auth";
 
 const ArticleDetail = (props) => {
   const dispatch = useDispatch();
-  const id = props.match.params.id;
+  const id = parseInt(props.match.params.id);
+  const viewerRef = useRef();
+  const pathRef = useRef();
+  const { username, profileImage } = getUserInfoFromLS();
 
   const articleList = useSelector((state) => state.article.articleList);
   const article_idx = articleList.findIndex((a) => a.id === id);
-
   const thisArticle = articleList[article_idx];
+  const commentList = useSelector((state) => state.comment.commentList);
+
+  const [commentValue, setCommentValue] = useState("");
 
   useEffect(() => {
     if (thisArticle) {
+      setContent(viewerRef, thisArticle.contents);
+      return;
+    }
+    if (commentList) {
       return;
     }
 
     dispatch(articleActions.getOneArticleAPI(id));
+    dispatch(commentActions.getCommentAPI(id));
   }, []);
+
+  const handleComment = () => {
+    const data = {
+      comment: commentValue,
+      username,
+      articleId: id,
+    };
+
+    dispatch(commentActions.postCommentAPI(data));
+  };
 
   return (
     <Container>
-      <Header />
-      <HeadWrap>
-        <TitleBox>
-          <Text fontSize="48px" isBold>
-            {thisArticle.title}
-          </Text>
-        </TitleBox>
-        <SubtitleBox>
-          <Text fontSize="24px">{thisArticle.description}</Text>
-        </SubtitleBox>
-        <InfoContainer>
-          <userInfoBox>
-            <Text isBold>{thisArticle.username}</Text>
-            <span>{" ∙ "}</span>
-            <Text>{timeToDate(thisArticle.createAt)}</Text>
-          </userInfoBox>
-          <ArtOptionBox>
-            <OptionButton>통계</OptionButton>
-            <OptionButton>수정</OptionButton>
-            <OptionButton>삭제</OptionButton>
-          </ArtOptionBox>
-        </InfoContainer>
-        <LikeShareWrap>
-          <LikeShareContainer>
-            <LikeShareBox>
-              <Button shape="circle" border="1px solid ">
-                <FavoriteIcon />
-                {/* <FavoriteBorderIcon /> */}
-              </Button>
-              <div>{thisArticle.likeCount}</div>
-              <Button shape="circle">
-                <ShareIcon />
-              </Button>
-            </LikeShareBox>
-          </LikeShareContainer>
-        </LikeShareWrap>
-      </HeadWrap>
-      <Image
-        shape="rectangle"
-        imgUrl={thisArticle.thumbnail}
-        width="768px"
-        height="432px"
-        margin="auto"
-      />
-      <ContentWrap>{thisArticle.contents}</ContentWrap>
-      <UserContainer>
-        <UserInfo>
+      {thisArticle && (
+        <>
+          <Header />
+          <HeadWrap>
+            <TitleBox>
+              <Text fontSize="48px" isBold>
+                {thisArticle.title}
+              </Text>
+            </TitleBox>
+            <SubtitleBox>
+              <Text fontSize="24px">{thisArticle.description}</Text>
+            </SubtitleBox>
+            <InfoContainer>
+              <UserInfoBox>
+                <Text isBold>{thisArticle.username}</Text>
+                <span>{" ∙ "}</span>
+                <Text>{timeToDate(thisArticle.createAt)}</Text>
+              </UserInfoBox>
+              <ArtOptionBox>
+                <OptionButton>통계</OptionButton>
+                <OptionButton>수정</OptionButton>
+                <OptionButton>삭제</OptionButton>
+              </ArtOptionBox>
+            </InfoContainer>
+            <LikeShareWrap>
+              <LikeShareContainer>
+                <LikeShareBox>
+                  <Button shape="circle" border="1px solid ">
+                    <FavoriteIcon />
+                    {/* <FavoriteBorderIcon /> */}
+                  </Button>
+                  <div>{thisArticle.likeCount}</div>
+                  <Button
+                    shape="circle"
+                    _onClick={() => {
+                      pathRef.current.select();
+                      document.execCommand("copy");
+                      pathRef.current.setSelectionRange(0, 0);
+                      alert("게시글 주소가 복사되었습니다.");
+                    }}
+                  >
+                    <input
+                      style={{ position: "fixed", left: "-100%" }}
+                      ref={pathRef}
+                      value={document.location.href}
+                      readOnly
+                    />
+                    <ShareIcon />
+                  </Button>
+                </LikeShareBox>
+              </LikeShareContainer>
+            </LikeShareWrap>
+          </HeadWrap>
           <Image
-            imgUrl={thisArticle.profileImage}
-            shape="circle"
-            width="128px"
-            height="128px"
-            margin="0 16px 0 0"
+            shape="rectangle"
+            imgUrl={thisArticle.thumbnail}
+            width="768px"
+            height="432px"
+            margin="auto"
           />
-          <Text isBold fontSize="24px">
-            {thisArticle.username}
-          </Text>
-        </UserInfo>
-      </UserContainer>
-      <CommentWrap>
-        <CommentInput>
-          <Text fontSize="18px" isBold>
-            {thisArticle.commentCount}
-            개의 댓글
-          </Text>
-          <Input
-            width="100%"
-            isMultiline
-            padding="16px"
-            margin="16px 0 24px 0"
-            placeholder="댓글을 작성하세요"
-          />
-          <ButtonSpace>
-            <Button shape="rectangle">댓글 작성</Button>
-          </ButtonSpace>
-        </CommentInput>
-        <CommentView>
-          {/* {articleList.map((a) => (
-            <Comment {...a} />
-          ))} */}
-          <Comment
-            comment="이것은 댓글 입니다. 이것은 댓글 입니다. 이것은 댓글입니다."
-            username="happyd1"
-            createdAt={parseInt(1578290155000)}
-          />
-          <Comment
-            comment="이것은 댓글 입니다. 이것은 댓글 입니다. 이것은 댓글입니다."
-            username="happyd1"
-            createdAt={parseInt(1578290155000)}
-          />
-          {/* {commentList} */}
-        </CommentView>
-      </CommentWrap>
+          <ContentWrap>
+            <MdViewer viewerRef={viewerRef} />
+          </ContentWrap>
+          <UserContainer>
+            <UserInfo>
+              <Image
+                imgUrl={thisArticle.profileImage}
+                shape="circle"
+                width="128px"
+                height="128px"
+                margin="0 16px 0 0"
+              />
+              <Text isBold fontSize="24px">
+                {thisArticle.username}
+              </Text>
+            </UserInfo>
+          </UserContainer>
+          <CommentWrap>
+            <CommentInput>
+              <Text fontSize="18px" isBold>
+                {thisArticle.commentCount}
+                개의 댓글
+              </Text>
+              <Input
+                width="100%"
+                isMultiline
+                padding="16px"
+                margin="16px 0 24px 0"
+                placeholder="댓글을 작성하세요"
+                value={commentValue}
+                _onChange={(e) => setCommentValue(e.target.value)}
+              />
+              <ButtonSpace>
+                <Button shape="rectangle" _onClick={handleComment}>
+                  댓글 작성
+                </Button>
+              </ButtonSpace>
+            </CommentInput>
+            <CommentView>
+              {commentList.map((a) => (
+                <Comment {...a} />
+              ))}
+            </CommentView>
+          </CommentWrap>
+        </>
+      )}
     </Container>
   );
 };
@@ -156,7 +192,7 @@ const InfoContainer = styled.div`
   justify-content: space-between;
 `;
 
-const userInfoBox = styled.div`
+const UserInfoBox = styled.div`
   display: flex;
   align-items: center;
   & > :nth-child(2) {
@@ -232,6 +268,7 @@ const ButtonSpace = styled.div`
   & > :nth-child(1) {
     position: absolute;
     right: 0;
+  }
 `;
 
 const CommentView = styled.div`

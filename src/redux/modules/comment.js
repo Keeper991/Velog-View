@@ -6,8 +6,12 @@ import { useDispatch } from "react-redux";
 const POST_COMMENT = "comment/POST";
 const PUT_COMMENT = "comment/PUT";
 const DELETE_COMMENT = "comment/DELETE";
+const GET_COMMENT = "comment/GET";
 const LOADING = "article/LOADING";
 
+const getComment = createAction(GET_COMMENT, (commentList) => ({
+  commentList,
+}));
 const postComment = createAction(POST_COMMENT, (comment) => ({ comment }));
 const putComment = createAction(PUT_COMMENT, (id, comment) => ({
   id,
@@ -22,12 +26,19 @@ const postCommentAPI = (comment) => {
     commentAPI.post(comment).then((response) => {
       const data = response.data;
       const id = data.id;
-
       comment.id = id;
-
+      comment.createdAt = Date.now();
       dispatch(postComment(comment));
     });
   };
+};
+
+const getCommentAPI = (articleId) => (dispatch, getState) => {
+  dispatch(loading(true));
+  commentAPI.get(articleId).then((response) => {
+    const data = response.data;
+    dispatch(getComment(data));
+  });
 };
 
 const putCommentAPI = (id, comment) => {
@@ -50,34 +61,35 @@ const deleteCommentAPI = (id) => {
 
 const initialComment = {
   id: "",
-  title: "",
-  description: "",
-  createAt: 0,
-  thumbnail: "",
-  commentCount: 0,
-  username: "user",
-  likeCount: 0,
-  profileImage: "default",
+  comment: "",
+  username: "",
+  articleId: "", // number
+  createdAt: "",
 };
 
 const initialState = {
-  commentList: [initialComment],
   isLoading: false,
+  commentList: [],
 };
 
 const reducer = handleActions(
   {
     [LOADING]: (state, action) =>
       produce(state, (draft) => {
-        draft.isLoading = action.payload;
+        draft.isLoading = action.payload.isLoading;
       }),
 
     [POST_COMMENT]: (state, action) =>
       produce(state, (draft) => {
-        draft.commentList.unshift(action.payload.comment);
+        draft.commentList.push(action.payload.comment);
         draft.isLoading = false;
       }),
 
+    [GET_COMMENT]: (state, action) =>
+      produce(state, (draft) => {
+        draft.commentList = action.payload.comment;
+        draft.isLoading = false;
+      }),
     [PUT_COMMENT]: (state, action) =>
       produce(state, (draft) => {
         const idx = draft.commentList.findIndex(
@@ -99,8 +111,8 @@ const reducer = handleActions(
 
         if (idx !== -1) {
           draft.commentList.splice(idx, 1);
-          draft.isLoading = false;
         }
+        draft.isLoading = false;
       }),
   },
   initialState
@@ -110,6 +122,7 @@ export const actionCreators = {
   postCommentAPI,
   putCommentAPI,
   deleteCommentAPI,
+  getCommentAPI,
 };
 
 export default reducer;

@@ -17,3 +17,33 @@ code {
 * {
   box-sizing: border-box;
 }
+
+.toastui-editor-tabs,
+.toastui-editor-mode-switch,
+.toastui-editor-md-container .toastui-editor-md-preview {
+  display: none !important;
+}
+.toastui-editor-defaultUI,
+.toastui-editor-defaultUI-toolbar,
+.toastui-editor-defaultUI-toolbar button {
+  border: none !important;
+}
+
+.toastui-editor-defaultUI-toolbar {
+  background-color: transparent !important;
+}
+/* .toastui-editor-defaultUI * {
+  background-color: transparent !important;
+} */
+.toastui-editor-popup {
+  left: 0 !important;
+}
+
+.toastui-editor-defaultUI-toolbar {
+  padding: 0 !important;
+}
+
+.toastui-editor-defaultUI .ProseMirror {
+  padding: 18px 0 !important;
+  height: 100% !important;
+}

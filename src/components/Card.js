@@ -64,8 +64,8 @@ const Container = styled.div`
   background-color: white;
   border-radius: 5px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  transition: 0.5s;
-  &: hover {
+  transition: transform 0.5s;
+  &:hover {
     cursor: pointer;
     transform: translateY(-12px);
   }
@@ -90,6 +90,16 @@ const ContentBox = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  & > span:last-child {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* 라인수 */
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    height: 4em; /* line-height 가 1.2em 이고 3라인을 자르기 때문에 height는 1.2em * 3 = 3.6em */
+  }
 `;
 
 const DtCmtWrap = styled.div`

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import timeToDate from "../shared/Time";
 
 const Comment = (props) => {
-  const { id, comment, username, articleid, createdAt } = props;
+  const { id, comment, username, articleId, createdAt } = props;
 
   return (
     <Container>

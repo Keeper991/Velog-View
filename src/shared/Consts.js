@@ -3,7 +3,7 @@ const Color = {
   gray: "#f8f9fa",
   white: "#fefefe",
   black: "#0e0e0e",
-  darkGray: "#eee",
+  darkGray: "#ddd",
 };
 
 export { Color };
