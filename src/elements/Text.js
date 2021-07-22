@@ -52,7 +52,7 @@ const ElTitle = styled.h1`
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) => (props.width ? `width: ${props.width};` : "")}
   ${(props) => (props.height ? `height: ${props.height};` : "")}
-  ${(props) => (props.fontsize ? `font-size: ${props.fontsize};` : "")}
+  ${(props) => (props.fontSize ? `font-size: ${props.fontSize};` : "")}
 `;
 
 const ElText = styled.span`
@@ -60,8 +60,8 @@ const ElText = styled.span`
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) => (props.width ? `width: ${props.width};` : "")}
   ${(props) => (props.height ? `height: ${props.height};` : "")}
-  ${(props) => (props.fontsize ? `font-size: ${props.fontsize};` : "")}
-  ${(props) => (props.isBold ? `font-weight: ${props.isBold};` : "")}
+  ${(props) => (props.fontSize ? `font-size: ${props.fontSize};` : "")}
+  ${(props) => (props.isBold ? `font-weight: bold;` : "font-weight: 400;")}
 `;
 
 export default Text;

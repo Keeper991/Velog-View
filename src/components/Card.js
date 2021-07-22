@@ -8,7 +8,7 @@ const Card = (props) => {
     id,
     title,
     description,
-    createAt,
+    createdAt,
     thumbnail,
     commentCount,
     profileImage,
@@ -34,7 +34,7 @@ const Card = (props) => {
           <Text padding="5px 0">{description}</Text>
         </ContentBox>
         <DtCmtWrap>
-          <Text>{timeToDate(createAt)}</Text>
+          <Text>{timeToDate(createdAt)}</Text>
           {" ∙ "}
           <Text>{commentCount}개의 댓글</Text>
         </DtCmtWrap>

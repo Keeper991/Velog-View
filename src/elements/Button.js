@@ -13,6 +13,7 @@ const Button = (props) => {
     _onClick,
     shape,
     fontSize,
+    border,
   } = props;
 
   if (shape === "circle") {
@@ -74,7 +75,7 @@ const Button = (props) => {
 Button.defaultProps = {};
 
 const ElCircleButton = styled.button`
-  border: none;
+  ${(props) => (props.border ? `border: ${props.border};` : "border: none;")}
   border-radius: 50%;
   cursor: pointer;
   ${(props) => (props.width ? `width: ${props.width};` : "")}
@@ -83,6 +84,7 @@ const ElCircleButton = styled.button`
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) => (props.bg ? `background-color: ${props.bg};` : "")}
   ${(props) => (props.color ? `color: ${props.color};` : "")}
+  ${(props) => (props.fontSize ? `font-size: ${props.fontSize};` : "")}
 `;
 
 const ElRectangleButton = styled.button`
@@ -93,8 +95,10 @@ const ElRectangleButton = styled.button`
   background-color: ${(props) => (props.bg ? props.bg : "rgb(32, 201, 151)")};
   color: ${(props) => (props.color ? props.color : "white")};
   height: ${(props) => (props.height ? props.height : "1.5rem")};
-  fontsize: 1rem;
-  padding: 0px 15px;
+  ${(props) =>
+    props.fontSize ? `font-size: ${props.fontSize};` : "fontsize: 1rem;"}
+  ${(props) =>
+    props.padding ? `padding: ${props.padding};` : "padding: 0px 15px;"}
 `;
 
 const ElPillButton = styled.button`
@@ -106,6 +110,7 @@ const ElPillButton = styled.button`
   background-color: white;
   padding: 0 15px;
   color: rgb(52, 58, 64);
+  ${(props) => (props.fontSize ? `font-size: ${props.fontSize};` : "")}
 `;
 
 export default Button;

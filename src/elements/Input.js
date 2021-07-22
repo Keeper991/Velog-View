@@ -10,12 +10,13 @@ const Input = (props) => {
     width,
     height,
     _onChange,
-    is_multiline,
+    isMultiline,
+    border,
   } = props;
 
   return (
     <React.Fragment>
-      {is_multiline ? (
+      {isMultiline ? (
         <ElTextarea
           placeholder={placeholder}
           padding={padding}
@@ -24,6 +25,7 @@ const Input = (props) => {
           height={height}
           value={value}
           onChange={_onChange}
+          border={border}
         ></ElTextarea>
       ) : (
         <ElInput
@@ -34,6 +36,7 @@ const Input = (props) => {
           height={height}
           value={value}
           onChange={_onChange}
+          border={border}
         />
       )}
     </React.Fragment>
@@ -43,11 +46,20 @@ const Input = (props) => {
 Input.defaultProps = {};
 
 const ElTextarea = styled.textarea`
+  border: ${(props) =>
+    props.border ? props.border : "1px solid rgb(233, 236, 239)"};
+  padding: ${(props) =>
+    props.padding ? props.padding : "padding: 1rem 1rem 1.5rem"};
+  ${(props) => (props.placeholder ? `placeholder: ${props.placeholder};` : "")}
   ${(props) => (props.width ? `width: ${props.width};` : "")}
   ${(props) => (props.height ? `height: ${props.height};` : "")}
-  ${(props) => (props.padding ? `padding: ${props.padding};` : "")}
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
-  ${(props) => (props.placeholder ? `placeholder: ${props.placeholder};` : "")}
+  resize: none;
+  outline: none;
+  border-radius: 4px;
+  min-height: 6.125rem;
+  color: rgb(33, 37, 41);
+  line-height: 1.75;
 `;
 
 const ElInput = styled.input`
