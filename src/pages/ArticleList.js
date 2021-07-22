@@ -7,17 +7,20 @@ import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
 import Header from "../components/Header";
 import { useEffect } from "react";
 import { actionCreators as articleActions } from "../redux/modules/article";
+import InfinityScroll from "../shared/InfinityScroll";
+import { history } from "../redux/configStore";
 
 const ArticleList = (props) => {
   const dispatch = useDispatch();
-  const articleList = useSelector((state) => state.articleList);
-  const isLoading = useSelector((state) => state.isLoading);
+  const articleList = useSelector((state) => state.article.articleList);
+  const isLoading = useSelector((state) => state.article.isLoading);
+  const paging = useSelector((state) => state.article.paging);
 
   useEffect(() => {
     if (articleList.length < 2) {
       dispatch(articleActions.getArticleAPI());
     }
-  });
+  }, []);
 
   return (
     <ContainerWrap>
@@ -38,9 +41,22 @@ const ArticleList = (props) => {
       </ButtonContainer>
       <Container>
         <CardList>
-          {articleList.map((c) => (
-            <Card {...c} />
-          ))}
+          <InfinityScroll
+            callNext={() => {
+              dispatch(articleActions.getArticleAPI(paging.nextPage, "id"));
+            }}
+            isNext={paging.nextPage > paging.totalPageCnt ? false : true}
+            loading={isLoading}
+          >
+            {articleList.map((a) => (
+              <Card
+                {...a}
+                _onClick={() => {
+                  // history.push(`//${a.id}`);
+                }}
+              />
+            ))}
+          </InfinityScroll>
         </CardList>
       </Container>
     </ContainerWrap>
@@ -89,6 +105,8 @@ const Container = styled.div``;
 const CardList = styled.div`
   display: flex;
   flex-wrap: wrap;
+  width: 1785px;
+  margin: auto;
 `;
 
 export default ArticleList;
