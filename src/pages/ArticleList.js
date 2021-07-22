@@ -1,62 +1,125 @@
 import styled from "styled-components";
 import Card from "../components/Card";
-import { Button, Text } from "../elements";
+import { Text } from "../elements";
 import { useDispatch, useSelector } from "react-redux";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
 import Header from "../components/Header";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { actionCreators as articleActions } from "../redux/modules/article";
 import InfinityScroll from "../shared/InfinityScroll";
 import { history } from "../redux/configStore";
+import { Color } from "../shared/Consts";
 
 const ArticleList = (props) => {
   const dispatch = useDispatch();
   const articleList = useSelector((state) => state.article.articleList);
+  const articleListOrderByLike = useSelector(
+    (state) => state.article.articleListOrderByLike
+  );
   const isLoading = useSelector((state) => state.article.isLoading);
   const paging = useSelector((state) => state.article.paging);
+  const [sortBy, setSortBy] = useState("createdAt");
 
   useEffect(() => {
-    if (articleList.length < 2) {
-      dispatch(articleActions.getArticleAPI());
+    if (sortBy === "createdAt" && articleList.length < 2) {
+      dispatch(articleActions.getArticleAPI(1, "createdAt"));
     }
-  }, []);
+    if (sortBy === "likeCount" && articleListOrderByLike.length < 2) {
+      dispatch(articleActions.getArticleAPI(1, "likeCount"));
+    }
+  }, [sortBy]);
 
   return (
     <ContainerWrap>
       <Header isMain />
       <ButtonContainer>
-        <DetailButton state="">
-          <TrendingUpIcon />
-          <Text fontSize="18px" isBold>
-            트렌딩
-          </Text>
-        </DetailButton>
-        <DetailButton>
-          <QueryBuilderIcon />
-          <Text fontSize="18px" isBold>
-            최신
-          </Text>
-        </DetailButton>
+        {sortBy === "createdAt" ? (
+          <>
+            <DetailButton
+              borderColor={Color.darkGray}
+              onClick={() => setSortBy("likeCount")}
+            >
+              <TrendingUpIcon style={{ color: Color.darkGray }} />
+              <Text fontSize="18px" isBold color={Color.darkGray}>
+                트렌딩
+              </Text>
+            </DetailButton>
+            <DetailButton onClick={() => setSortBy("createdAt")}>
+              <QueryBuilderIcon />
+              <Text fontSize="18px" isBold>
+                최신
+              </Text>
+            </DetailButton>
+          </>
+        ) : (
+          <>
+            <DetailButton onClick={() => setSortBy("likeCount")}>
+              <TrendingUpIcon />
+              <Text fontSize="18px" isBold>
+                트렌딩
+              </Text>
+            </DetailButton>
+            <DetailButton
+              borderColor={Color.darkGray}
+              onClick={() => setSortBy("createdAt")}
+            >
+              <QueryBuilderIcon style={{ color: Color.darkGray }} />
+              <Text fontSize="18px" isBold color={Color.darkGray}>
+                최신
+              </Text>
+            </DetailButton>
+          </>
+        )}
       </ButtonContainer>
       <Container>
         <CardList>
-          <InfinityScroll
-            callNext={() => {
-              dispatch(articleActions.getArticleAPI(paging.nextPage, "id"));
-            }}
-            isNext={paging.nextPage > paging.totalPageCnt ? false : true}
-            loading={isLoading}
-          >
-            {articleList.map((a) => (
-              <Card
-                {...a}
-                _onClick={() => {
-                  // history.push(`//${a.id}`);
-                }}
-              />
-            ))}
-          </InfinityScroll>
+          {sortBy === "createdAt" ? (
+            <InfinityScroll
+              callNext={() => {
+                dispatch(articleActions.getArticleAPI(paging.nextPage, sortBy));
+              }}
+              isNext={paging.nextPage > paging.totalPageCnt ? false : true}
+              loading={isLoading}
+            >
+              {articleList.map((a, idx) => (
+                <Card
+                  {...a}
+                  key={idx}
+                  _onClick={() => {
+                    history.push(`/@${a.username}/${a.id}`);
+                  }}
+                />
+              ))}
+            </InfinityScroll>
+          ) : (
+            <InfinityScroll
+              callNext={() => {
+                dispatch(
+                  articleActions.getArticleAPI(
+                    paging.nextPageOrderByLike,
+                    sortBy
+                  )
+                );
+              }}
+              isNext={
+                paging.nextPageOrderByLike > paging.totalPageCntOrderByLike
+                  ? false
+                  : true
+              }
+              loading={isLoading}
+            >
+              {articleListOrderByLike.map((a, idx) => (
+                <Card
+                  {...a}
+                  key={idx}
+                  _onClick={() => {
+                    history.push(`/@${a.username}/${a.id}`);
+                  }}
+                />
+              ))}
+            </InfinityScroll>
+          )}
         </CardList>
       </Container>
     </ContainerWrap>
@@ -65,7 +128,7 @@ const ArticleList = (props) => {
 
 const ContainerWrap = styled.div`
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f8f9fa;
   & > :nth-child(1) {
     margin: auto;
@@ -86,8 +149,10 @@ const DetailButton = styled.div`
   & > :nth-child(2) {
     margin-left: 8px;
   }
-  border-bottom: 3px solid rgb(52, 58, 64);
+  border-bottom: 3px solid
+    ${({ borderColor }) => (borderColor ? borderColor : "rgb(52, 58, 64)")};
   margin: 16px;
+  cursor: pointer;
 `;
 
 // const LatestButton = styled.div`
@@ -107,6 +172,21 @@ const CardList = styled.div`
   flex-wrap: wrap;
   width: 1785px;
   margin: auto;
+  @media only screen and (max-width: 1785px) {
+    width: 1428px;
+  }
+  @media only screen and (max-width: 1428px) {
+    width: 1071px;
+  }
+  @media only screen and (max-width: 1071px) {
+    width: 714px;
+  }
+  @media only screen and (max-width: 714px) {
+    width: 100%;
+    & > div {
+      width: 100%;
+    }
+  }
 `;
 
 export default ArticleList;

@@ -10,10 +10,10 @@ import { useState } from "react";
 
 const Header = (props) => {
   const dispatch = useDispatch();
-  const { isMain, userName } = props;
+  const { isMain } = props;
 
   const isLogin = useSelector((state) => state.user.isLogin);
-  const { profileImage } = getUserInfoFromLS();
+  const { username, profileImage } = getUserInfoFromLS();
 
   const [isOnclick, setIsOnclick] = useState(false);
 
@@ -43,7 +43,7 @@ const Header = (props) => {
               <Text isBold>V</Text>
             </Button>
             <Button shape="rectangle" bg="#FFFFFF" color="#2E2E2E">
-              <Text isBold> {userName}.log </Text>
+              <Text isBold> {username}.log </Text>
             </Button>
           </DesignWrap>
         )}

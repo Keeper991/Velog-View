@@ -10,9 +10,10 @@ const DELETE = "article/DELETE";
 const LOADING = "article/LOADING";
 
 const postArticle = createAction(POST, (article) => ({ article }));
-const getArticle = createAction(GET, (articleList, totalPageCnt) => ({
+const getArticle = createAction(GET, (articleList, totalPageCnt, sortBy) => ({
   articleList,
   totalPageCnt,
+  sortBy,
 }));
 const getOneArticle = createAction(GET_ONE, (article) => ({
   article,
@@ -24,37 +25,63 @@ const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 const postArticleAPI = (article) => {
   return (dispatch, getState, { history }) => {
     dispatch(loading(true));
-    articleAPI.post(article).then((response) => {
-      const data = response.data;
-      const id = data.id;
+    articleAPI
+      .post(article)
+      .then((response) => {
+        const data = response.data;
+        const id = data.id;
+        article.id = id;
+        article.createdAt = Date.now();
+        article.commentCount = 0;
+        article.likeCount = 0;
 
-      article.id = id;
-
-      //mdn 공식문서 참조 (배열이 아닌 dic형태라서 push를 쓰면 안된다.)
-
-      dispatch(postArticle(article));
-    });
+        dispatch(postArticle(article));
+        alert("게시글 작성에 성공했습니다!");
+        history.push(`/@${article.username}/${id}`);
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(loading(false));
+        alert("게시글 작성에 실패했습니다.");
+      });
   };
 };
 
 const getArticleAPI = (pageNum, sortBy) => {
   return (dispatch, getState, { history }) => {
-    const { nextPage, totalPageCnt } = getState().article.paging;
-    if (nextPage > totalPageCnt && nextPage !== 1) {
-      return;
+    if (sortBy === "createdAt") {
+      const { nextPage, totalPageCnt } = getState().article.paging;
+      if (nextPage > totalPageCnt && nextPage !== 1) {
+        return;
+      }
+      dispatch(loading(true));
+
+      articleAPI.getPage(nextPage, sortBy).then((response) => {
+        const data = response.data;
+        const articleList = data.content;
+        const totalPageCnt = data.totalPages;
+
+        dispatch(getArticle(articleList, totalPageCnt, sortBy));
+      });
+    } else {
+      const { nextPageOrderByLike, totalPageCntOrderByLike } =
+        getState().article.paging;
+      if (
+        nextPageOrderByLike > totalPageCntOrderByLike &&
+        nextPageOrderByLike !== 1
+      ) {
+        return;
+      }
+      dispatch(loading(true));
+
+      articleAPI.getPage(nextPageOrderByLike, sortBy).then((response) => {
+        const data = response.data;
+        const articleList = data.content;
+        const totalPageCnt = data.totalPages;
+
+        dispatch(getArticle(articleList, totalPageCnt, sortBy));
+      });
     }
-    dispatch(loading(true));
-
-    // get()을 getPage()로 바꾸고, 인자로 들어갈 적절한 변수를 넣으세욥.
-    articleAPI.getPage(nextPage, "id").then((response) => {
-      // response에서 적절한 값을 찾아서 redux에 알맞게 넣어주세욥.
-
-      const data = response.data;
-      const articleList = data.content;
-      const totalPageCnt = data.totalPages;
-
-      dispatch(getArticle(articleList, totalPageCnt));
-    });
   };
 };
 
@@ -72,9 +99,18 @@ const getOneArticleAPI = (id) => {
 const putArticleAPI = (id, article) => {
   return (dispatch, getState, { history }) => {
     dispatch(loading(true));
-    articleAPI.put(id, article).then(() => {
-      dispatch(putArticle(article));
-    });
+    articleAPI
+      .put(id, article)
+      .then(() => {
+        dispatch(putArticle(article));
+        alert("게시글 수정에 성공했습니다!");
+        history.push(`/@${article.username}/${id}`);
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(loading(false));
+        alert("게시글 수정에 실패했습니다.");
+      });
   };
 };
 
@@ -101,7 +137,9 @@ const initialArticle = {
 
 const initialState = {
   // 최신순
-  articleList: [initialArticle],
+  articleList: [
+    // initialArticle
+  ],
   // 좋아요순
   articleListOrderByLike: [],
   // 로딩중
@@ -123,18 +161,46 @@ const reducer = handleActions(
     [POST]: (state, action) =>
       produce(state, (draft) => {
         draft.articleList.unshift(action.payload.article);
+        draft.articleListOrderByLike.push(action.payload.article);
         draft.isLoading = false;
       }),
     [GET]: (state, action) =>
       produce(state, (draft) => {
-        draft.articleList.push(...action.payload.articleList);
-        draft.paging.totalPageCnt = action.payload.totalPageCnt;
-        draft.paging.nextPage += 1;
-        draft.isLoading = false;
+        if (action.payload.sortBy === "createdAt") {
+          draft.articleList.push(...action.payload.articleList);
+          draft.articleList = draft.articleList.reduce((acc, cur) => {
+            if (acc.findIndex((a) => a.id === cur.id) === -1) {
+              return [...acc, cur];
+            } else {
+              acc[acc.findIndex((a) => a.id === cur.id)] = cur;
+              return acc;
+            }
+          }, []);
+          draft.paging.totalPageCnt = action.payload.totalPageCnt;
+          draft.paging.nextPage += 1;
+          draft.isLoading = false;
+        } else {
+          draft.articleListOrderByLike.push(...action.payload.articleList);
+          draft.articleListOrderByLike = draft.articleListOrderByLike.reduce(
+            (acc, cur) => {
+              if (acc.findIndex((a) => a.id === cur.id) === -1) {
+                return [...acc, cur];
+              } else {
+                acc[acc.findIndex((a) => a.id === cur.id)] = cur;
+                return acc;
+              }
+            },
+            []
+          );
+          draft.paging.totalPageCntOrderByLike = action.payload.totalPageCnt;
+          draft.paging.nextPageOrderByLike += 1;
+          draft.isLoading = false;
+        }
       }),
     [GET_ONE]: (state, action) =>
       produce(state, (draft) => {
         draft.articleList.push(...action.payload.article);
+        // draft.articleListOrderByLike.push(...action.payload.article);
         draft.isLoading = false;
       }),
     [PUT]: (state, action) =>
@@ -172,5 +238,7 @@ export const actionCreators = {
   postArticleAPI,
   getArticleAPI,
   deleteArticleAPI,
+  getOneArticleAPI,
+  putArticleAPI,
 };
 export default reducer;

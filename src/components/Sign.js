@@ -101,8 +101,8 @@ const Sign = ({
                 <ProfileImageWrap>
                   <Image
                     shape="circle"
-                    width="5em"
-                    height="5em"
+                    width="3em"
+                    height="3em"
                     imgUrl={profileImage}
                   />
                   <ProfileBtnWrap>
@@ -124,7 +124,7 @@ const Sign = ({
                   </ProfileBtnWrap>
                 </ProfileImageWrap>
                 <Button shape="rectangle">회원가입</Button>
-                <Text>
+                <Text fontSize="0.825em">
                   계정이 이미 있으신가요?{" "}
                   <Text
                     _onClick={() => {
@@ -141,7 +141,7 @@ const Sign = ({
             ) : (
               <>
                 <Button shape="rectangle">로그인</Button>
-                <Text>
+                <Text fontSize="0.825em">
                   아직 회원이 아니신가요?{" "}
                   <Text
                     _onClick={() => {
