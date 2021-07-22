@@ -15,7 +15,7 @@ const articleAPI = {
   getOne: (id) => api.get(`/articles/${id}`),
   getPage: (pageNum, sortBy) =>
     api.get(
-      `/articles/page?sortBy=${sortBy}&isAsc=${false}&size=10&page=${pageNum}`
+      `/articles/page?sortBy=${sortBy}&isAsc=false&size=10&page=${pageNum}`
     ),
   post: (article) => api.post("/articles", article),
   put: (id, article) => api.put(`/articles/${id}`, article),
