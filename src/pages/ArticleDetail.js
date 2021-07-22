@@ -29,13 +29,13 @@ const ArticleDetail = (props) => {
   const [commentValue, setCommentValue] = useState("");
 
   useEffect(() => {
+    dispatch(commentActions.getCommentAPI(id));
     if (thisArticle) {
       setContent(viewerRef, thisArticle.contents);
       return;
     }
 
     dispatch(articleActions.getOneArticleAPI(id));
-    dispatch(commentActions.getCommentAPI(id));
   }, []);
 
   const handleComment = () => {
