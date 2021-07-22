@@ -4,12 +4,19 @@ import { articleAPI } from "../../shared/API";
 
 const POST = "article/POST";
 const GET = "article/GET";
+const GET_ONE = "article/GET_ONE";
 const PUT = "article/PUT";
 const DELETE = "article/DELETE";
 const LOADING = "article/LOADING";
 
 const postArticle = createAction(POST, (article) => ({ article }));
-const getArticle = createAction(GET, (id) => ({ id }));
+const getArticle = createAction(GET, (articleList, totalPageCnt) => ({
+  articleList,
+  totalPageCnt,
+}));
+const getOneArticle = createAction(GET_ONE, (article) => ({
+  article,
+}));
 const putArticle = createAction(PUT, (id, article) => ({ id, article }));
 const deleteArticle = createAction(DELETE, (id) => ({ id }));
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
@@ -30,20 +37,23 @@ const postArticleAPI = (article) => {
   };
 };
 
-const getArticleAPI = () => {
+const getArticleAPI = (pageNum, sortBy) => {
   return (dispatch, getState, { history }) => {
     const { nextPage, totalPageCnt } = getState().article.paging;
-    if (nextPage > totalPageCnt) {
+    if (nextPage > totalPageCnt && nextPage !== 1) {
       return;
     }
     dispatch(loading(true));
 
     // get()을 getPage()로 바꾸고, 인자로 들어갈 적절한 변수를 넣으세욥.
-    articleAPI.get().then((response) => {
+    articleAPI.getPage(nextPage, "id").then((response) => {
       // response에서 적절한 값을 찾아서 redux에 알맞게 넣어주세욥.
-      const articleList = response.data;
 
-      dispatch(getArticle(articleList));
+      const data = response.data;
+      const articleList = data.content;
+      const totalPageCnt = data.totalPages;
+
+      dispatch(getArticle(articleList, totalPageCnt));
     });
   };
 };
@@ -54,7 +64,7 @@ const getOneArticleAPI = (id) => {
     articleAPI.getOne(id).then((response) => {
       const article = [response.data];
 
-      dispatch(getArticle(article));
+      dispatch(getOneArticle(article));
     });
   };
 };
@@ -118,6 +128,13 @@ const reducer = handleActions(
     [GET]: (state, action) =>
       produce(state, (draft) => {
         draft.articleList.push(...action.payload.articleList);
+        draft.paging.totalPageCnt = action.payload.totalPageCnt;
+        draft.paging.nextPage += 1;
+        draft.isLoading = false;
+      }),
+    [GET_ONE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.articleList.push(...action.payload.article);
         draft.isLoading = false;
       }),
     [PUT]: (state, action) =>

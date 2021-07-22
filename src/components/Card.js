@@ -14,10 +14,11 @@ const Card = (props) => {
     profileImage,
     username,
     likeCount,
+    _onClick,
   } = props;
 
   return (
-    <Container>
+    <Container onClick={_onClick}>
       <ThumbnailBox>
         <Image
           imgUrl={thumbnail}

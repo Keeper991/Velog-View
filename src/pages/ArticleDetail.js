@@ -6,9 +6,26 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import Comment from "../components/Comment";
+import { actionCreators as articleActions } from "../redux/modules/article";
+import { useEffect } from "react";
+import timeToDate from "../shared/Time";
 
 const ArticleDetail = (props) => {
-  const { Article } = props;
+  const dispatch = useDispatch();
+  const id = props.match.params.id;
+
+  const articleList = useSelector((state) => state.article.articleList);
+  const article_idx = articleList.findIndex((a) => a.id === id);
+
+  const thisArticle = articleList[article_idx];
+
+  useEffect(() => {
+    if (thisArticle) {
+      return;
+    }
+
+    dispatch(articleActions.getOneArticleAPI(id));
+  }, []);
 
   return (
     <Container>
@@ -16,22 +33,17 @@ const ArticleDetail = (props) => {
       <HeadWrap>
         <TitleBox>
           <Text fontSize="48px" isBold>
-            스타트업 4년차에 억대연봉 개발자가 된 야간대 졸업생
+            {thisArticle.title}
           </Text>
         </TitleBox>
         <SubtitleBox>
-          <Text fontSize="24px">
-            이것은 부제목 입니다. 여기는 부제목 입니다.
-          </Text>
+          <Text fontSize="24px">{thisArticle.description}</Text>
         </SubtitleBox>
         <InfoContainer>
           <userInfoBox>
-            <Text isBold>박화영</Text>
+            <Text isBold>{thisArticle.username}</Text>
             <span>{" ∙ "}</span>
-            <Text>
-              {/* {timeToDate(createAt)} */}
-              5일 전
-            </Text>
+            <Text>{timeToDate(thisArticle.createAt)}</Text>
           </userInfoBox>
           <ArtOptionBox>
             <OptionButton>통계</OptionButton>
@@ -46,7 +58,7 @@ const ArticleDetail = (props) => {
                 <FavoriteIcon />
                 {/* <FavoriteBorderIcon /> */}
               </Button>
-              <div>0</div>
+              <div>{thisArticle.likeCount}</div>
               <Button shape="circle">
                 <ShareIcon />
               </Button>
@@ -56,30 +68,30 @@ const ArticleDetail = (props) => {
       </HeadWrap>
       <Image
         shape="rectangle"
-        imgUrl="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXNsYW5kfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+        imgUrl={thisArticle.thumbnail}
         width="768px"
         height="432px"
         margin="auto"
       />
-      <ContentWrap>{Article}</ContentWrap>
+      <ContentWrap>{thisArticle.contents}</ContentWrap>
       <UserContainer>
         <UserInfo>
           <Image
-            imgUrl="https://media.vlpt.us/images/happyd1/profile/d6469687-2ac6-4b09-af2c-dbb530b1b0e2/프사.jpg?w=240"
+            imgUrl={thisArticle.profileImage}
             shape="circle"
             width="128px"
             height="128px"
             margin="0 16px 0 0"
           />
           <Text isBold fontSize="24px">
-            박화영
+            {thisArticle.username}
           </Text>
         </UserInfo>
       </UserContainer>
       <CommentWrap>
         <CommentInput>
           <Text fontSize="18px" isBold>
-            {/* {commentCount} */}
+            {thisArticle.commentCount}
             개의 댓글
           </Text>
           <Input
@@ -94,6 +106,9 @@ const ArticleDetail = (props) => {
           </ButtonSpace>
         </CommentInput>
         <CommentView>
+          {/* {articleList.map((a) => (
+            <Comment {...a} />
+          ))} */}
           <Comment
             comment="이것은 댓글 입니다. 이것은 댓글 입니다. 이것은 댓글입니다."
             username="happyd1"
