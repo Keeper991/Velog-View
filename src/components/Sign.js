@@ -89,6 +89,7 @@ const Sign = ({
               value={password}
               _onChange={(e) => setPassword(e.target.value)}
               placeholder="비밀번호를 입력하세요"
+              type="password"
             />
             {isActiveSignupMode ? (
               <>
@@ -97,6 +98,7 @@ const Sign = ({
                   value={passwordChecker}
                   _onChange={(e) => setPasswordChecker(e.target.value)}
                   placeholder="비밀번호 확인"
+                  type="password"
                 />
                 <ProfileImageWrap>
                   <Image
