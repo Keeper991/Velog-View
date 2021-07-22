@@ -39,7 +39,7 @@ function App() {
         <Switch>
           <Route path="/" component={ArticleList} exact />
           <Route path="/write" component={ArticleForm} />
-          <Route path="/@:username/:title" component={ArticleDetail} />
+          <Route path="/@:username/:id" component={ArticleDetail} />
         </Switch>
       </ConnectedRouter>
 

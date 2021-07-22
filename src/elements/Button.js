@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 const Button = (props) => {
@@ -18,56 +17,50 @@ const Button = (props) => {
 
   if (shape === "circle") {
     return (
-      <React.Fragment>
-        <ElCircleButton
-          width={width}
-          height={height}
-          onClick={_onClick}
-          padding={padding}
-          margin={margin}
-          bg={bg}
-          color={color}
-          fontSize={fontSize}
-        >
-          {children}
-        </ElCircleButton>
-      </React.Fragment>
+      <ElCircleButton
+        width={width}
+        height={height}
+        onClick={_onClick}
+        padding={padding}
+        margin={margin}
+        bg={bg}
+        color={color}
+        fontSize={fontSize}
+      >
+        {children}
+      </ElCircleButton>
     );
   }
   if (shape === "rectangle") {
     return (
-      <React.Fragment>
-        <ElRectangleButton
-          width={width}
-          height={height}
-          onClick={_onClick}
-          padding={padding}
-          margin={margin}
-          bg={bg}
-          color={color}
-          fontSize={fontSize}
-        >
-          {children}
-        </ElRectangleButton>
-      </React.Fragment>
+      <ElRectangleButton
+        width={width}
+        height={height}
+        onClick={_onClick}
+        padding={padding}
+        margin={margin}
+        bg={bg}
+        color={color}
+        fontSize={fontSize}
+      >
+        {children}
+      </ElRectangleButton>
     );
   }
   if (shape === "pill") {
     return (
-      <React.Fragment>
-        <ElPillButton
-          width={width}
-          height={height}
-          onClick={_onClick}
-          padding={padding}
-          margin={margin}
-          bg={bg}
-          color={color}
-          fontSize={fontSize}
-        >
-          {children}
-        </ElPillButton>
-      </React.Fragment>
+      <ElPillButton
+        width={width}
+        height={height}
+        onClick={_onClick}
+        padding={padding}
+        margin={margin}
+        bg={bg}
+        color={color}
+        fontSize={fontSize}
+      >
+        {children}
+      </ElPillButton>
     );
   }
 };

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { history } from "../redux/configStore";
 import { actionCreators as userActions } from "../redux/modules/user";
 import { getUserInfoFromLS } from "../shared/Auth";
+import { useState } from "react";
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -13,6 +14,9 @@ const Header = (props) => {
 
   const isLogin = useSelector((state) => state.user.isLogin);
   const { profileImage } = getUserInfoFromLS();
+
+  const [isOnclick, setIsOnclick] = useState(false);
+
   return (
     <>
       <Container>
@@ -48,6 +52,7 @@ const Header = (props) => {
           <Button shape="circle" bg="#f8f9fa">
             <SearchIcon />
           </Button>
+
           {!isLogin ? (
             <Button
               shape="pill"
@@ -61,10 +66,19 @@ const Header = (props) => {
                 새 글 작성
               </Button>
               <ProfileButtons>
-                <Button shape="circle" bg="#f8f9fa">
+                <Button
+                  shape="circle"
+                  bg="#f8f9fa"
+                  _onClick={() => setIsOnclick(!isOnclick)}
+                >
                   <Image width="40px" height="40px" imgUrl={profileImage} />
+                  <ArrowDropDownIcon />
                 </Button>
-                <ArrowDropDownIcon />
+                <DropDownWrap IsOn={isOnclick}>
+                  <DropDown>
+                    <LogOut>로그아웃</LogOut>
+                  </DropDown>
+                </DropDownWrap>
               </ProfileButtons>
             </>
           )}
@@ -75,7 +89,8 @@ const Header = (props) => {
 };
 
 const Container = styled.div`
-  width: 100vw;
+  width: 80%;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -96,11 +111,39 @@ const ButtonContainer = styled.div`
 const ProfileButtons = styled.div`
   display: flex;
   align-items: center;
+  & > :nth-child(1) {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const DesignWrap = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const DropDownWrap = styled.div`
+  position: relative;
+  ${(props) => (props.IsOn ? "display: block;" : "display: none;")}
+`;
+
+const DropDown = styled.div`
+  position: absolute;
+  top: 100%;
+  margin-top: 2rem;
+  right: 0px;
+`;
+
+const LogOut = styled.div`
+  position: relative;
+  width: 12rem;
+  background-color: white;
+  box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px;
+  color: rgb(33, 37, 41);
+  padding: 0.75rem 1rem;
+  line-height: 1.5;
+  font-weight: 500;
+  cursor: pointer;
 `;
 
 export default Header;
