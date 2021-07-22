@@ -38,7 +38,7 @@ function App() {
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/" component={ArticleList} exact />
-          <Route path="/write" component={ArticleForm} />
+          <Route path="/write" component={ArticleForm} exact />
           <Route path="/write/:id" component={ArticleForm} />
           <Route path="/@:username/:id" component={ArticleDetail} />
         </Switch>

@@ -16,7 +16,7 @@ import { getUserInfoFromLS } from "../shared/Auth";
 const ArticleForm = (props) => {
   const dispatch = useDispatch();
   const [isActiveInfoWindow, setIsActiveInfoWindow] = useState(false);
-  const id = props.match.params.id;
+  const id = parseInt(props.match.params.id);
   const isEdit = id ? true : false;
   const articleList = useSelector((state) => state.article.articleList);
   const isLoading = useSelector((state) => state.article.isLoading);
@@ -37,13 +37,17 @@ const ArticleForm = (props) => {
     if (article) {
       axios.get(article.contents).then((res) => {
         contentRef.current.getInstance().setMarkdown(res.data);
+        viewerRef.current.getInstance().setMarkdown(res.data);
+        setTitle(article.title);
+        setDescription(article.description);
+        setThumbnail(article.thumbnail);
       });
     }
 
-    if (isEdit) {
+    if (!article && isEdit) {
       dispatch(articleActions.getOneArticleAPI(id));
     }
-  }, []);
+  }, [article]);
 
   //
   const callUpload = async (content) => {
@@ -200,6 +204,14 @@ const WriteContainer = styled.div`
     height: 100%;
     width: 50%;
   }
+  @media only screen and (max-width: 750px) {
+    & > *:first-child {
+      width: 100%;
+    }
+    & > *:last-child {
+      display: none;
+    }
+  }
 `;
 const FormLeft = styled.section`
   display: flex;
@@ -248,8 +260,11 @@ const FormRight = styled.section`
   background-color: ${Color.gray};
   padding: 2em;
   overflow-y: scroll;
+  word-break: break-all;
 `;
 const PreviewHeader = styled.div`
+  width: 100%;
+  word-break: break-all;
   font-size: 2.5rem;
   font-weight: 700;
   color: ${Color.black};

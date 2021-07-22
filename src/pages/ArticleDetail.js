@@ -29,14 +29,13 @@ const ArticleDetail = (props) => {
   const [commentValue, setCommentValue] = useState("");
 
   useEffect(() => {
-    dispatch(commentActions.getCommentAPI(id));
-    if (thisArticle) {
+    if (!thisArticle) {
+      dispatch(articleActions.getOneArticleAPI(id));
+    } else {
       setContent(viewerRef, thisArticle.contents);
-      return;
     }
-
-    dispatch(articleActions.getOneArticleAPI(id));
-  }, []);
+    dispatch(commentActions.getCommentAPI(id));
+  }, [thisArticle]);
 
   const handleComment = () => {
     const data = {
@@ -71,11 +70,11 @@ const ArticleDetail = (props) => {
               </UserInfoBox>
               <ArtOptionBox>
                 <PermitStrict username={thisArticle.username}>
-                  <OptionButton _onClick={() => history.push(`/write/${id}`)}>
+                  <OptionButton onClick={() => history.push(`/write/${id}`)}>
                     수정
                   </OptionButton>
                   <OptionButton
-                    _onClick={() => {
+                    onClick={() => {
                       dispatch(articleActions.deleteArticleAPI(id));
                     }}
                   >
@@ -103,7 +102,7 @@ const ArticleDetail = (props) => {
                     }}
                   >
                     <input
-                      style={{ position: "fixed", left: "-100%" }}
+                      style={{ position: "fixed", top: "-1000%" }}
                       ref={pathRef}
                       value={document.location.href}
                       readOnly
@@ -116,10 +115,10 @@ const ArticleDetail = (props) => {
           </HeadWrap>
           <Image
             shape="rectangle"
-            imgUrl={thisArticle.thumbnail}
+            imgUrl={`${thisArticle.thumbnail}`}
             width="768px"
             height="432px"
-            margin="auto"
+            margin="0 auto"
           />
           <ContentWrap>
             <MdViewer viewerRef={viewerRef} />
@@ -176,6 +175,7 @@ const ArticleDetail = (props) => {
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
+  overflow-x: hidden;
   background-color: white;
   & > :nth-child(1) {
     margin: auto;
@@ -237,8 +237,8 @@ const LikeShareWrap = styled.div`
 
 const LikeShareContainer = styled.div`
   position: fixed;
-  top: 390px;
-  left: 27.5%;
+  top: 300px;
+  transform: translateX(-200%);
 `;
 
 const LikeShareBox = styled.div`
@@ -258,6 +258,7 @@ const LikeShareBox = styled.div`
 const ContentWrap = styled.div`
   width: 768px;
   margin: auto;
+  word-break: break-all;
 `;
 
 const UserContainer = styled.div`

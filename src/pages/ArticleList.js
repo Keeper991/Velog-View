@@ -137,7 +137,7 @@ const ContainerWrap = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  width: 1785px;
+  width: 80%;
   margin: auto;
   margin-top: 24px;
 `;

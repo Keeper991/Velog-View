@@ -91,6 +91,7 @@ const ContentBox = styled.div`
   flex-direction: column;
   height: 100%;
   & > span:last-child {
+    font-size: 0.75rem;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -98,7 +99,8 @@ const ContentBox = styled.div`
     -webkit-line-clamp: 4; /* 라인수 */
     -webkit-box-orient: vertical;
     word-wrap: break-word;
-    height: 4em; /* line-height 가 1.2em 이고 3라인을 자르기 때문에 height는 1.2em * 3 = 3.6em */
+    line-height: 1.2em;
+    height: 5em; /* line-height 가 1.2em 이고 3라인을 자르기 때문에 height는 1.2em * 3 = 3.6em */
   }
 `;
 
