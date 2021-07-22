@@ -11,14 +11,15 @@ import { actionCreators as commentActions } from "../redux/modules/comment";
 import { useEffect, useRef, useState } from "react";
 import timeToDate from "../shared/Time";
 import MdViewer, { setContent } from "../shared/MdViewer";
-import { getUserInfoFromLS } from "../shared/Auth";
+import { getUserInfoFromLS, Permit, PermitStrict } from "../shared/Auth";
+import { history } from "../redux/configStore";
 
 const ArticleDetail = (props) => {
   const dispatch = useDispatch();
   const id = parseInt(props.match.params.id);
   const viewerRef = useRef();
   const pathRef = useRef();
-  const { username, profileImage } = getUserInfoFromLS();
+  const { username } = getUserInfoFromLS();
 
   const articleList = useSelector((state) => state.article.articleList);
   const article_idx = articleList.findIndex((a) => a.id === id);
@@ -30,9 +31,6 @@ const ArticleDetail = (props) => {
   useEffect(() => {
     if (thisArticle) {
       setContent(viewerRef, thisArticle.contents);
-      return;
-    }
-    if (commentList) {
       return;
     }
 
@@ -48,6 +46,7 @@ const ArticleDetail = (props) => {
     };
 
     dispatch(commentActions.postCommentAPI(data));
+    setCommentValue("");
   };
 
   return (
@@ -71,9 +70,18 @@ const ArticleDetail = (props) => {
                 <Text>{timeToDate(thisArticle.createAt)}</Text>
               </UserInfoBox>
               <ArtOptionBox>
-                <OptionButton>통계</OptionButton>
-                <OptionButton>수정</OptionButton>
-                <OptionButton>삭제</OptionButton>
+                <PermitStrict username={thisArticle.username}>
+                  <OptionButton _onClick={() => history.push(`/write/${id}`)}>
+                    수정
+                  </OptionButton>
+                  <OptionButton
+                    _onClick={() => {
+                      dispatch(articleActions.deleteArticleAPI(id));
+                    }}
+                  >
+                    삭제
+                  </OptionButton>
+                </PermitStrict>
               </ArtOptionBox>
             </InfoContainer>
             <LikeShareWrap>
@@ -132,26 +140,28 @@ const ArticleDetail = (props) => {
           <CommentWrap>
             <CommentInput>
               <Text fontSize="18px" isBold>
-                {thisArticle.commentCount}
+                {commentList?.length}
                 개의 댓글
               </Text>
-              <Input
-                width="100%"
-                isMultiline
-                padding="16px"
-                margin="16px 0 24px 0"
-                placeholder="댓글을 작성하세요"
-                value={commentValue}
-                _onChange={(e) => setCommentValue(e.target.value)}
-              />
-              <ButtonSpace>
-                <Button shape="rectangle" _onClick={handleComment}>
-                  댓글 작성
-                </Button>
-              </ButtonSpace>
+              <Permit>
+                <Input
+                  width="100%"
+                  isMultiline
+                  padding="16px"
+                  margin="16px 0 24px 0"
+                  placeholder="댓글을 작성하세요"
+                  value={commentValue}
+                  _onChange={(e) => setCommentValue(e.target.value)}
+                />
+                <ButtonSpace>
+                  <Button shape="rectangle" _onClick={handleComment}>
+                    댓글 작성
+                  </Button>
+                </ButtonSpace>
+              </Permit>
             </CommentInput>
             <CommentView>
-              {commentList.map((a) => (
+              {commentList?.map((a) => (
                 <Comment {...a} />
               ))}
             </CommentView>

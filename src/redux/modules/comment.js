@@ -87,7 +87,7 @@ const reducer = handleActions(
 
     [GET_COMMENT]: (state, action) =>
       produce(state, (draft) => {
-        draft.commentList = action.payload.comment;
+        draft.commentList = action.payload.commentList;
         draft.isLoading = false;
       }),
     [PUT_COMMENT]: (state, action) =>
@@ -123,6 +123,7 @@ export const actionCreators = {
   putCommentAPI,
   deleteCommentAPI,
   getCommentAPI,
+  getComment,
 };
 
 export default reducer;

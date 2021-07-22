@@ -119,6 +119,7 @@ const deleteArticleAPI = (id) => {
     dispatch(loading(true));
     articleAPI.delete(id).then(() => {
       dispatch(deleteArticle(id));
+      history.push("/");
     });
   };
 };

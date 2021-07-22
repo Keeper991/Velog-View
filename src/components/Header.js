@@ -39,11 +39,12 @@ const Header = (props) => {
               padding="0 10px"
               color="#FFFFFF"
               bg="#2E2E2E"
+              _onClick={() => history.push("/")}
             >
               <Text isBold>V</Text>
             </Button>
             <Button shape="rectangle" bg="#FFFFFF" color="#2E2E2E">
-              <Text isBold> {username}.log </Text>
+              {username && <Text isBold> {username}.log </Text>}
             </Button>
           </DesignWrap>
         )}
@@ -76,7 +77,9 @@ const Header = (props) => {
                 </Button>
                 <DropDownWrap IsOn={isOnclick}>
                   <DropDown>
-                    <LogOut>로그아웃</LogOut>
+                    <LogOut onClick={() => dispatch(userActions.logout())}>
+                      로그아웃
+                    </LogOut>
                   </DropDown>
                 </DropDownWrap>
               </ProfileButtons>

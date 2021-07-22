@@ -12,6 +12,7 @@ const Input = (props) => {
     _onChange,
     isMultiline,
     border,
+    type,
   } = props;
 
   return (
@@ -38,6 +39,7 @@ const Input = (props) => {
           value={value}
           onChange={_onChange}
           border={border}
+          type={type}
         />
       )}
     </React.Fragment>

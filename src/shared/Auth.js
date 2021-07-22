@@ -16,4 +16,24 @@ const setTokenToLS = (token) => {
   localStorage.setItem(TOKEN_NAME, token);
 };
 
-export { getUserInfoFromLS, setTokenToLS };
+const Permit = ({ children, ...props }) => {
+  const { username } = getUserInfoFromLS();
+
+  if (username) {
+    return <>{children}</>;
+  } else {
+    return <></>;
+  }
+};
+
+const PermitStrict = ({ username, children, ...props }) => {
+  const { username: loginUsername } = getUserInfoFromLS();
+
+  if (username === loginUsername) {
+    return <>{children}</>;
+  } else {
+    return <></>;
+  }
+};
+
+export { getUserInfoFromLS, setTokenToLS, Permit, PermitStrict };

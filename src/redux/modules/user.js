@@ -90,6 +90,7 @@ const reducer = handleActions(
     [LOGOUT]: (state, action) =>
       produce(state, (draft) => {
         draft.user = { username: "", profileImage: "", likeList: [] };
+        setTokenToLS(null);
         draft.isLogin = false;
         draft.isUserChecking = false;
       }),

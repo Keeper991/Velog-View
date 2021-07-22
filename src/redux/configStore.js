@@ -3,7 +3,7 @@ import { createBrowserHistory } from "history";
 import { connectRouter } from "connected-react-router";
 import thunk from "redux-thunk";
 
-import { user, article } from "./modules";
+import { user, article, comment } from "./modules";
 
 const history = createBrowserHistory();
 const middlewares = [thunk.withExtraArgument({ history })];
@@ -16,6 +16,7 @@ if (env === "development") {
 const rootReducer = combineReducers({
   user,
   article,
+  comment,
   router: connectRouter(history),
 });
 
