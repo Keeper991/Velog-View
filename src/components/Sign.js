@@ -119,7 +119,10 @@ const Sign = ({
                     <Button
                       shape="rectangle"
                       width="100px"
-                      _onClick={() => setProfileImage(defaultProfile)}
+                      _onClick={(e) => {
+                        e.preventDefault();
+                        setProfileImage(defaultProfile);
+                      }}
                     >
                       삭제
                     </Button>
