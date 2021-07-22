@@ -2,18 +2,22 @@ import styled from "styled-components";
 import Card from "../components/Card";
 import { Button, Text } from "../elements";
 import { useDispatch, useSelector } from "react-redux";
-import actionCreators from "../redux/modules/article";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
 import Header from "../components/Header";
+import { useEffect } from "react";
+import { actionCreators as articleActions } from "../redux/modules/article";
 
 const ArticleList = (props) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const articleList = useSelector((state) => state.articleList);
+  const isLoading = useSelector((state) => state.isLoading);
 
-  // dispatch(actionCreators.getArticleAPI());
-
-  // const cardData = useSelector((state) => state.articleList);
-  // const isLoading = useSelector((state) => state.isLoading);
+  useEffect(() => {
+    if (articleList.length < 2) {
+      dispatch(articleActions.getArticleAPI());
+    }
+  });
 
   return (
     <ContainerWrap>
@@ -33,11 +37,11 @@ const ArticleList = (props) => {
         </DetailButton>
       </ButtonContainer>
       <Container>
-        {/* <CardList>
-          {cardData.map((c) => (
+        <CardList>
+          {articleList.map((c) => (
             <Card {...c} />
           ))}
-        </CardList> */}
+        </CardList>
       </Container>
     </ContainerWrap>
   );
@@ -83,10 +87,8 @@ const DetailButton = styled.div`
 const Container = styled.div``;
 
 const CardList = styled.div`
-  margin: auto;
   display: flex;
   flex-wrap: wrap;
-  width: 1785px;
 `;
 
 export default ArticleList;

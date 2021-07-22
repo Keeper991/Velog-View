@@ -1,7 +1,6 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import { articleAPI } from "../../shared/API";
-import { useDispatch } from "react-redux";
 
 const POST = "article/POST";
 const GET = "article/GET";
@@ -33,8 +32,15 @@ const postArticleAPI = (article) => {
 
 const getArticleAPI = () => {
   return (dispatch, getState, { history }) => {
+    const { nextPage, totalPageCnt } = getState().article.paging;
+    if (nextPage > totalPageCnt) {
+      return;
+    }
     dispatch(loading(true));
+
+    // get()을 getPage()로 바꾸고, 인자로 들어갈 적절한 변수를 넣으세욥.
     articleAPI.get().then((response) => {
+      // response에서 적절한 값을 찾아서 redux에 알맞게 넣어주세욥.
       const articleList = response.data;
 
       dispatch(getArticle(articleList));
@@ -94,10 +100,10 @@ const initialState = {
   paging: {
     // 최신순
     nextPage: 1,
-    totalArticleCnt: 0,
+    totalPageCnt: 0,
     // 좋아요순
     nextPageOrderByLike: 1,
-    totalArticleCntOrderByLike: 0,
+    totalPageCntOrderByLike: 0,
     size: 10,
   },
 };
