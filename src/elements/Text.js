@@ -11,6 +11,8 @@ const Text = (props) => {
     fontSize,
     isTitle,
     isBold,
+    color,
+    _onClick,
   } = props;
 
   return (
@@ -22,6 +24,8 @@ const Text = (props) => {
           width={width}
           height={height}
           fontSize={fontSize}
+          onClick={_onClick}
+          color={color}
         >
           {children}
         </ElTitle>
@@ -33,6 +37,8 @@ const Text = (props) => {
           height={height}
           fontSize={fontSize}
           isBold={isBold}
+          onClick={_onClick}
+          color={color}
         >
           {children}
         </ElText>
@@ -53,6 +59,7 @@ const ElTitle = styled.h1`
   ${(props) => (props.width ? `width: ${props.width};` : "")}
   ${(props) => (props.height ? `height: ${props.height};` : "")}
   ${(props) => (props.fontSize ? `font-size: ${props.fontSize};` : "")}
+  ${({ color }) => (color ? `color: ${color};` : "")}
 `;
 
 const ElText = styled.span`
@@ -62,6 +69,7 @@ const ElText = styled.span`
   ${(props) => (props.height ? `height: ${props.height};` : "")}
   ${(props) => (props.fontSize ? `font-size: ${props.fontSize};` : "")}
   ${(props) => (props.isBold ? `font-weight: bold;` : "font-weight: 400;")}
+  ${({ color }) => (color ? `color: ${color};` : "")}
 `;
 
 export default Text;

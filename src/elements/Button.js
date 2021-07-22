@@ -96,7 +96,7 @@ const ElRectangleButton = styled.button`
   color: ${(props) => (props.color ? props.color : "white")};
   height: ${(props) => (props.height ? props.height : "1.5rem")};
   ${(props) =>
-    props.fontSize ? `font-size: ${props.fontSize};` : "fontsize: 1rem;"}
+    props.fontSize ? `font-size: ${props.fontSize};` : "font-size: 1rem;"}
   ${(props) =>
     props.padding ? `padding: ${props.padding};` : "padding: 0px 15px;"}
 `;

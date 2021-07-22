@@ -26,6 +26,7 @@ const Input = (props) => {
           value={value}
           onChange={_onChange}
           border={border}
+          maxLength="150"
         ></ElTextarea>
       ) : (
         <ElInput
