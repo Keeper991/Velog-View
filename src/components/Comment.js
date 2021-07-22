@@ -73,12 +73,13 @@ const Comment = (props) => {
             <Input
               isMultiline
               value={commentValue}
+              width="100%"
               _onChange={(e) => setCommentValue(e.target.value)}
             />
             <ButtonWrap>
               <Button
                 shape="rectangle"
-                bg={Color.gray}
+                bg="gray"
                 _onClick={() => setIsEditMode(false)}
               >
                 취소
@@ -138,6 +139,9 @@ const OptionButton = styled.div`
   cursor: pointer;
   color: rgb(134, 142, 150);
   font-size: 14px;
+  :hover {
+    color: black;
+  }
 `;
 
 const Content = styled.div`
@@ -147,6 +151,7 @@ const Content = styled.div`
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-top: 24px;
   & > * {
     margin-left: 1em;
   }

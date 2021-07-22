@@ -87,12 +87,13 @@ const ArticleDetail = (props) => {
             <LikeShareWrap>
               <LikeShareContainer>
                 <LikeShareBox>
-                  <Button shape="circle" border="1px solid ">
-                    <FavoriteIcon />
+                  <Button bg="white" shape="circle">
+                    <FavoriteIcon fontSize="large" />
                     {/* <FavoriteBorderIcon /> */}
                   </Button>
                   <div>{thisArticle.likeCount}</div>
                   <Button
+                    bg="white"
                     shape="circle"
                     _onClick={() => {
                       pathRef.current.select();
@@ -107,7 +108,7 @@ const ArticleDetail = (props) => {
                       value={document.location.href}
                       readOnly
                     />
-                    <ShareIcon />
+                    <ShareIcon fontSize="large" />
                   </Button>
                 </LikeShareBox>
               </LikeShareContainer>
@@ -224,6 +225,9 @@ const OptionButton = styled.button`
   cursor: pointer;
   color: rgb(134, 142, 150);
   font-size: 16px;
+  :hover {
+    color: black;
+  }
 `;
 
 const LikeShareWrap = styled.div`
@@ -232,8 +236,9 @@ const LikeShareWrap = styled.div`
 `;
 
 const LikeShareContainer = styled.div`
-  position: absolute;
-  left: -7rem;
+  position: fixed;
+  top: 390px;
+  left: 27.5%;
 `;
 
 const LikeShareBox = styled.div`

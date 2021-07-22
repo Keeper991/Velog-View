@@ -57,6 +57,8 @@ const Header = (props) => {
           {!isLogin ? (
             <Button
               shape="pill"
+              bg="#343A40"
+              color="white"
               _onClick={() => dispatch(userActions.setActiveSign(true))}
             >
               로그인
@@ -67,14 +69,25 @@ const Header = (props) => {
                 새 글 작성
               </Button>
               <ProfileButtons>
-                <Button
-                  shape="circle"
-                  bg="#f8f9fa"
-                  _onClick={() => setIsOnclick(!isOnclick)}
-                >
-                  <Image width="40px" height="40px" imgUrl={profileImage} />
-                  <ArrowDropDownIcon />
-                </Button>
+                {isMain ? (
+                  <Button
+                    shape="circle"
+                    bg="#F8F9FA"
+                    _onClick={() => setIsOnclick(!isOnclick)}
+                  >
+                    <Image width="40px" height="40px" imgUrl={profileImage} />
+                    <ArrowDropDownIcon />
+                  </Button>
+                ) : (
+                  <Button
+                    shape="circle"
+                    bg="white"
+                    _onClick={() => setIsOnclick(!isOnclick)}
+                  >
+                    <Image width="40px" height="40px" imgUrl={profileImage} />
+                    <ArrowDropDownIcon />
+                  </Button>
+                )}
                 <DropDownWrap IsOn={isOnclick}>
                   <DropDown>
                     <LogOut onClick={() => dispatch(userActions.logout())}>

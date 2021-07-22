@@ -100,9 +100,9 @@ const ElPillButton = styled.button`
   cursor: pointer;
   font-weight: bold;
   height: 2rem;
-  background-color: white;
+  background-color: ${(props) => (props.bg ? props.bg : "white")};
   padding: 0 15px;
-  color: rgb(52, 58, 64);
+  color: ${(props) => (props.color ? props.color : "rgb(52, 58, 64)")};
   ${(props) => (props.fontSize ? `font-size: ${props.fontSize};` : "")}
 `;
 
